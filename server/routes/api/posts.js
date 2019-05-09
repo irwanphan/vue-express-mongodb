@@ -11,9 +11,10 @@ router.get('/', async (req, res) => {
     // run test on browser
     // res.send('hello');
 
+    // save loadPOstsCollection in var posts
     const posts = await loadPostsCollection();
-    // find with empty {} can be pass arg to find something
-    // and return in array so toArray
+    // find with empty {} can be pass arg to search text/something
+    // sned array of posts in the database
     res.send(await posts.find({}).toArray());
 });
 
@@ -33,7 +34,7 @@ async function loadPostsCollection() {
     });
 
     // get posts connection os that we can run methods on it
-    return client.db('Cluster0').collection();
+    return client.db('Cluster0-tpjld').collection('posts');
 }
 
 module.exports = router;
