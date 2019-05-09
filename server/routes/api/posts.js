@@ -20,11 +20,31 @@ router.get('/', async (req, res) => {
 
 
 // add post
+router.post('/', async(req, res) => {
+    const posts = await loadPostsCollection();
 
+    // insert one is a method that comes with mongodb driver
+    await posts.insertOne({
+        text: req.body.text,
+        createdAt: new Date()
+    });
+
+    // 201 means OK and something was created
+    res.status(201).send();
+});
 
 
 // delete post
+// delete need a specific post to delete
+// /:id represent whatever the id
+router.delete('/:id', async (req, res) => {
+    const posts = await loadPostsCollection();
 
+    // when using mongodb driver, the _id is a special type of field / objectId
+    await posts.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
+
+    res.status(200).send();
+})
 
 
 // connect to cloud.mongodb
