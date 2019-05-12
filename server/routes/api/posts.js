@@ -1,5 +1,6 @@
 const express = require('express');
 const mongodb = require('mongodb');
+const MongoClient = require('mongodb').MongoClient;
 
 const router = express.Router();
 
@@ -41,7 +42,9 @@ router.delete('/:id', async (req, res) => {
     const posts = await loadPostsCollection();
 
     // when using mongodb driver, the _id is a special type of field / objectId
-    await posts.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
+    await posts.deleteOne({
+        _id: new mongodb.ObjectID(req.params.id)
+    });
 
     res.status(200).send();
 })
@@ -52,9 +55,18 @@ async function loadPostsCollection() {
     const client = await mongodb.MongoClient.connect('mongodb+srv://irwanphan:qwertyuiop@cluster0-tpj1d.mongodb.net/test?retryWrites=true', {
         useNewUrlParser: true
     });
+    // const uri = 'mongodb+srv://irwanphan:qwertyuiop@cluster0-tpj1d.mongodb.net/test?retryWrites=true';
 
+    // const client = await MongoClient.connect(uri, {
+    //     useNewUrlParser: true
+    // })
+
+    // const collection = client.db('Cluster0-tpjld').collection('posts');
+
+    // return collection;
     // get posts connection os that we can run methods on it
     return client.db('Cluster0-tpjld').collection('posts');
+
 }
 
 module.exports = router;
